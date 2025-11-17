@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SnakeController : MonoBehaviour
 {
@@ -8,17 +10,81 @@ public class SnakeController : MonoBehaviour
     // add seg when collecting packets
     // detect collisions
 
+    public float moveRate = 0.15f; // time between moves
+    private float moveTimer;
 
+    public Vector2Int direction = Vector2Int.right; // starting direction
+
+    public Transform segmentPrefab;
+
+    private List<Transform> segments = new List<Transform>();
+
+    private Vector3 lastHeadPos;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        segments = new List<Transform>();
+        segments.Add(this.transform); // first seg = head;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.W) && direction != Vector2Int.down) direction = Vector2Int.up;
+        else if (Input.GetKeyDown(KeyCode.S) && direction != Vector2Int.up) direction = Vector2Int.down;
+        else if (Input.GetKeyDown(KeyCode.A) && direction != Vector2Int.right) direction = Vector2Int.left;
+        else if (Input.GetKeyDown(KeyCode.D) && direction != Vector2Int.left) direction = Vector2Int.right;
     }
+
+    private void FixedUpdate()
+    {
+        moveTimer += Time.fixedDeltaTime;
+
+        if (moveTimer >= moveRate)
+        {
+            moveTimer = 0f;
+            Move();
+        }
+    }
+    void Move()
+    {
+        lastHeadPos = transform.position;
+
+        // Move head
+        Vector3 newPos = transform.position + new Vector3(direction.x, direction.y, 0);
+        transform.position = newPos;
+
+        // Move tail segments
+        for (int i = 1; i < segments.Count; i++)
+        {
+            Vector3 tempPos = segments[i].position;
+            segments[i].position = lastHeadPos;
+            lastHeadPos = tempPos;
+        }
+    }
+
+    public void Grow() 
+    {
+        Transform newSeg = Instantiate(segmentPrefab);
+        newSeg.position = segments[segments.Count - 1].position;
+        segments.Add(newSeg);
+    
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        
+        if (collision.CompareTag("Packet"))
+        {
+            Grow();
+            Destroy(collision.gameObject);
+            FindObjectOfType<PacketSpawner>().SpawnSinglePacket();
+        }
+        else if (collision.CompareTag("Wall") || collision.CompareTag("Enemy"))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+    }
+
 }
