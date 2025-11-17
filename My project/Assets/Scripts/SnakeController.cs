@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -20,6 +21,8 @@ public class SnakeController : MonoBehaviour
     private List<Transform> segments = new List<Transform>();
 
     private Vector3 lastHeadPos;
+
+    private bool isDead = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -74,6 +77,7 @@ public class SnakeController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (isDead) return;
         
         if (collision.CompareTag("Packet"))
         {
@@ -87,8 +91,26 @@ public class SnakeController : MonoBehaviour
         }
         else if (collision.CompareTag("Wall") || collision.CompareTag("Enemy"))
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            isDead = true; // free logic
+            enabled = false; // stop movement, snake don't tweak (pls)
+
+            AntiVirusDrone drone = collision.GetComponent<AntiVirusDrone>();
+            if (drone != null) drone.isFrozen = true;
+
+
+            StartCoroutine(DeathSequence());
         }
+    }
+
+    IEnumerator DeathSequence()
+    {
+        GameManager.instance.PlayGlitch();
+
+        yield return new WaitForSeconds(0.2f);
+
+        UnityEngine.SceneManagement.SceneManager.LoadScene(
+            UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex
+            );
     }
 
 }
