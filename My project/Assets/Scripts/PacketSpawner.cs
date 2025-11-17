@@ -3,8 +3,8 @@ using UnityEngine;
 public class PacketSpawner : MonoBehaviour
 {
     public GameObject packetPrefab;
-    public Vector2 spawnAreaMin = new Vector2 (0, 0);
-    public Vector2 spawnAreaMax = new Vector2 (0, 0);
+    public Vector2 spawnAreaMin = new Vector2 (-8, -4);
+    public Vector2 spawnAreaMax = new Vector2 (8, 4);
 // Start is called once before the first execution of Update after the MonoBehaviour is created
 void Start()
     {

@@ -80,6 +80,10 @@ public class SnakeController : MonoBehaviour
             Grow();
             Destroy(collision.gameObject);
             FindObjectOfType<PacketSpawner>().SpawnSinglePacket();
+
+            // test
+            GameManager.instance.PlayGlitch();
+
         }
         else if (collision.CompareTag("Wall") || collision.CompareTag("Enemy"))
         {

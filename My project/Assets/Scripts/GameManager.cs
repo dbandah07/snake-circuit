@@ -26,9 +26,14 @@ public class GameManager : MonoBehaviour
 
         scoreTXT.text = "SCORE: " + score;
 
-        if (glitchAnim != null) 
-        {
+    }
+
+    public void PlayGlitch()
+    {
+
+    //    if (glitchAnim != null)
+    //    {
             glitchAnim.SetTrigger("Flash");
-        }
+    //    }
     }
 }
