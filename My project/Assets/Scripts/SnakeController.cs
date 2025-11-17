@@ -77,6 +77,9 @@ public class SnakeController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+
+        Debug.Log("Collided w " + collision.name + " Tag is " + collision.tag + " Layer is " + LayerMask.LayerToName(collision.gameObject.layer));
+
         if (isDead) return;
         
         if (collision.CompareTag("Packet"))
@@ -93,6 +96,9 @@ public class SnakeController : MonoBehaviour
         {
             isDead = true; // free logic
             enabled = false; // stop movement, snake don't tweak (pls)
+
+            GameManager.instance.PlayGlitch();
+
 
             AntiVirusDrone drone = collision.GetComponent<AntiVirusDrone>();
             if (drone != null) drone.isFrozen = true;
