@@ -14,7 +14,7 @@ public class SnakeController : MonoBehaviour
     public float moveRate = 0.15f; // time between moves
     private float moveTimer;
 
-    public Vector2Int direction = Vector2Int.right; // starting direction
+    public Vector2Int direction = Vector2Int.zero; // starting direction
 
     public Transform segmentPrefab;
 
@@ -23,6 +23,9 @@ public class SnakeController : MonoBehaviour
     private Vector3 lastHeadPos;
 
     private bool isDead = false;
+    private bool hasStarted = false;
+
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -34,6 +37,17 @@ public class SnakeController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!hasStarted)
+        {
+            if (Input.GetKeyDown(KeyCode.W)) { direction = Vector2Int.up; hasStarted = true; }
+            if (Input.GetKeyDown(KeyCode.S)) { direction = Vector2Int.down; hasStarted = true; }
+            if (Input.GetKeyDown(KeyCode.A)) { direction = Vector2Int.left; hasStarted = true; }
+            if (Input.GetKeyDown(KeyCode.D)) { direction = Vector2Int.right; hasStarted = true; }
+
+            return; // do NOT allow movement until input
+        }
+
+        // normal controls
         if (Input.GetKeyDown(KeyCode.W) && direction != Vector2Int.down) direction = Vector2Int.up;
         else if (Input.GetKeyDown(KeyCode.S) && direction != Vector2Int.up) direction = Vector2Int.down;
         else if (Input.GetKeyDown(KeyCode.A) && direction != Vector2Int.right) direction = Vector2Int.left;
@@ -52,6 +66,9 @@ public class SnakeController : MonoBehaviour
     }
     void Move()
     {
+        if (!hasStarted) return;
+        if (direction == Vector2Int.zero) return;
+
         lastHeadPos = transform.position;
 
         // Move head
