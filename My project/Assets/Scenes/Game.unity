@@ -290,7 +290,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -434.52, y: 423.24}
+  m_AnchoredPosition: {x: -295.7, y: 185.9}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &532416537
@@ -340,8 +340,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 26
+  m_fontSizeBase: 26
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -521,8 +521,56 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 0
-  scoreTXT: {fileID: 0}
+  scoreTXT: {fileID: 532416537}
+  layerTXT: {fileID: 1374779394}
   glitchAnim: {fileID: 1623442826}
+--- !u!1 &809636869
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 809636871}
+  - component: {fileID: 809636870}
+  m_Layer: 0
+  m_Name: PacketSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &809636870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 809636869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aaeb97deef639c24ab459f71f4f5b33e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  packetPrefab: {fileID: 4349013128262458025, guid: 9021118376e6bef4eafb360c8353bfbb, type: 3}
+  spawnAreaMin: {x: -8, y: -4}
+  spawnAreaMax: {x: 8, y: 4}
+--- !u!4 &809636871
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 809636869}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &825663318
 GameObject:
   m_ObjectHideFlags: 0
@@ -739,7 +787,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 517041832326460988, guid: 5849be9b0130b4041b8523c8d599cb91, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.23
+      value: -4.03
       objectReference: {fileID: 0}
     - target: {fileID: 517041832326460988, guid: 5849be9b0130b4041b8523c8d599cb91, type: 3}
       propertyPath: m_LocalPosition.z
@@ -964,7 +1012,7 @@ GameObject:
   - component: {fileID: 1374779395}
   - component: {fileID: 1374779394}
   m_Layer: 5
-  m_Name: Layer_TX
+  m_Name: Layer_TXT
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -986,7 +1034,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 633.9, y: -442.2}
+  m_AnchoredPosition: {x: 387.2, y: -207.89}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1374779394
@@ -1036,8 +1084,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 26
+  m_fontSizeBase: 26
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1266,7 +1314,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 100
   m_TargetDisplay: 0
 --- !u!224 &1995627174
 RectTransform:
@@ -1328,7 +1376,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 517041832326460988, guid: 5849be9b0130b4041b8523c8d599cb91, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4.1
+      value: 4.06
       objectReference: {fileID: 0}
     - target: {fileID: 517041832326460988, guid: 5849be9b0130b4041b8523c8d599cb91, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1458,3 +1506,4 @@ SceneRoots:
   - {fileID: 1995627174}
   - {fileID: 1367597059}
   - {fileID: 738877783}
+  - {fileID: 809636871}

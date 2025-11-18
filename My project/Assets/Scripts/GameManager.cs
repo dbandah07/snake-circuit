@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
 
     public int score = 0;
     public TextMeshProUGUI scoreTXT;
+    public TextMeshProUGUI layerTXT;
 
     public Animator glitchAnim;
     // Start is called once before the first execution of Update after the MonoBehaviour is created

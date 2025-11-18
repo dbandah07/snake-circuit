@@ -101,14 +101,16 @@ public class SnakeController : MonoBehaviour
         
         if (collision.CompareTag("Packet"))
         {
+            if (isDead) return;
             Grow();
             Destroy(collision.gameObject);
             FindObjectOfType<PacketSpawner>().SpawnSinglePacket();
 
             // test
             GameManager.instance.PlayGlitch();
-
+            return;
         }
+
         else if (collision.CompareTag("Wall") || collision.CompareTag("Enemy"))
         {
             isDead = true; // free logic
