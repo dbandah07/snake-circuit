@@ -33,6 +33,12 @@ public class GameManager : MonoBehaviour
 
         int layer = (score / 5) + 1;
         layerTXT.text = "LAYER: " + layer;
+
+
+        if (score % 5 == 0)
+        {
+            PlayGlitch(); // LVL transition
+        }
     }
 
     public void PlayGlitch()
