@@ -141,6 +141,8 @@ public class SnakeController : MonoBehaviour
         GetComponent<Collider2D>().enabled = false;
 
         Grow();
+        GameManager.instance.AddScore(1);
+
         Destroy(packet);
         FindObjectOfType<PacketSpawner>().SpawnSinglePacket();
 

@@ -17,16 +17,22 @@ public class GameManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        instance = this;
+        if (instance == null) instance = this;
+        else Destroy(gameObject);
+
+        scoreTXT.text = "SCORE: 0";
+        layerTXT.text = "LAYER: 1";
+
     }
 
     // Update is called once per frame
     public void AddScore(int val)
     {
         score += val;
-
         scoreTXT.text = "SCORE: " + score;
 
+        int layer = (score / 5) + 1;
+        layerTXT.text = "LAYER: " + layer;
     }
 
     public void PlayGlitch()
