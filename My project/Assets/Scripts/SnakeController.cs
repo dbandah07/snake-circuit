@@ -101,13 +101,12 @@ public class SnakeController : MonoBehaviour
         
         if (collision.CompareTag("Packet"))
         {
-            if (isDead) return;
-            Grow();
-            Destroy(collision.gameObject);
-            FindObjectOfType<PacketSpawner>().SpawnSinglePacket();
+            //Grow();
+            //Destroy(collision.gameObject);
 
-            // test
-            GameManager.instance.PlayGlitch();
+            //FindObjectOfType<PacketSpawner>().SpawnSinglePacket();
+            //GameManager.instance.PlayGlitch();
+            StartCoroutine(HandlePacketPickup(collision.gameObject));
             return;
         }
 
@@ -136,6 +135,18 @@ public class SnakeController : MonoBehaviour
         UnityEngine.SceneManagement.SceneManager.LoadScene(
             UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex
             );
+    }
+    IEnumerator HandlePacketPickup(GameObject packet)
+    {
+        GetComponent<Collider2D>().enabled = false;
+
+        Grow();
+        Destroy(packet);
+        FindObjectOfType<PacketSpawner>().SpawnSinglePacket();
+
+        yield return new WaitForFixedUpdate();
+
+        GetComponent<Collider2D>().enabled = true;
     }
 
 }
