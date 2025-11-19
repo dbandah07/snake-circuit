@@ -25,7 +25,9 @@ public class SnakeController : MonoBehaviour
     private bool isDead = false;
     private bool hasStarted = false;
 
-
+    private Vector2 touchStartPos;
+    private bool touchMoved = false;
+    public float minSwipeDistance = 50f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -37,6 +39,9 @@ public class SnakeController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        HandleTouchControls();
+
         if (!hasStarted)
         {
             if (Input.GetKeyDown(KeyCode.W)) { direction = Vector2Int.up; hasStarted = true; }
@@ -47,7 +52,7 @@ public class SnakeController : MonoBehaviour
             return; // do NOT allow movement until input
         }
 
-        // normal controls
+        // KEYBOARD CONTROLS
         if (Input.GetKeyDown(KeyCode.W) && direction != Vector2Int.down) direction = Vector2Int.up;
         else if (Input.GetKeyDown(KeyCode.S) && direction != Vector2Int.up) direction = Vector2Int.down;
         else if (Input.GetKeyDown(KeyCode.A) && direction != Vector2Int.right) direction = Vector2Int.left;
@@ -125,6 +130,53 @@ public class SnakeController : MonoBehaviour
             StartCoroutine(DeathSequence());
         }
     }
+
+    void HandleTouchControls()
+    {
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+
+            if (touch.phase == TouchPhase.Began)
+            {
+                touchStartPos = touch.position;
+                touchMoved = false;
+            }
+
+            else if (touch.phase == TouchPhase.Moved)
+            {
+                touchMoved = true;
+            }
+
+            else if (touch.phase == TouchPhase.Ended && touchMoved)
+            {
+                Vector2 touchEndPos = touch.position;
+                Vector2 swipe = touchEndPos - touchStartPos;
+
+                if (swipe.magnitude < minSwipeDistance)
+                    return;  
+
+                // horizontal swipe
+                if (Mathf.Abs(swipe.x) > Mathf.Abs(swipe.y))
+                {
+                    if (swipe.x > 0 && direction != Vector2Int.left)
+                        direction = Vector2Int.right;
+                    else if (swipe.x < 0 && direction != Vector2Int.right)
+                        direction = Vector2Int.left;
+                }
+                else // vertical swipe
+                {
+                    if (swipe.y > 0 && direction != Vector2Int.down)
+                        direction = Vector2Int.up;
+                    else if (swipe.y < 0 && direction != Vector2Int.up)
+                        direction = Vector2Int.down;
+                }
+
+                hasStarted = true; 
+            }
+        }
+    }
+
 
     IEnumerator DeathSequence()
     {
