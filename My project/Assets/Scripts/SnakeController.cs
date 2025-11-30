@@ -117,6 +117,8 @@ public class SnakeController : MonoBehaviour
 
         else if (collision.CompareTag("Wall") || collision.CompareTag("Enemy"))
         {
+            Debug.Log("DEATH TRIGGERED BY: " + collision.name + " TAG: " + collision.tag + " LAYER: " + LayerMask.LayerToName(collision.gameObject.layer));
+
             isDead = true; // free logic
             enabled = false; // stop movement, snake don't tweak (pls)
 
@@ -176,6 +178,12 @@ public class SnakeController : MonoBehaviour
             }
         }
     }
+    public void HardFreeze()
+    {
+        moveTimer = 0f;
+        direction = Vector2Int.zero;
+    }
+
 
 
     IEnumerator DeathSequence()
