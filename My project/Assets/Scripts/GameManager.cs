@@ -2,22 +2,31 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.Rendering.Universal;
 using System.Collections;
+using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
-    // score +
-    // glitch cells
+
 
     public static GameManager instance;
 
+    // ui + score + glitch
     public int score = 0;
     public TextMeshProUGUI scoreTXT;
     public TextMeshProUGUI layerTXT;
-
     public Animator glitchAnim;
 
 
-    public GameObject Layer2Objects;
+    // layer 2
+    public GameObject[] Layer2Prefabs;
+    public Transform Layer2Container;
+
+    // layer 3
+    public GameObject Layer3BG; 
+    public GameObject[] Layer3Prefabs;
+    public Transform Layer3Container;
+    private bool layer3Active = false;
+
     private int currLayer = 1;
     private bool isTrans = false; 
 
@@ -33,9 +42,25 @@ public class GameManager : MonoBehaviour
         scoreTXT.text = "SCORE: 0";
         layerTXT.text = "LAYER: 1";
 
-        if (Layer2Objects != null)
+        if (Layer2Container != null) {
+            foreach (Transform child in Layer2Container) child.gameObject.SetActive(false);
+        }
+
+        if (Layer3Container != null) {
+            foreach (Transform child in Layer3Container) child.gameObject.SetActive(false);
+
+        }
+        if (Layer3BG != null) Layer3BG.SetActive(false);
+    }
+
+     void Update()
+    {
+        // DEBUGGING/TESTING
+
+        Debug.Log("Adding 5 to score...");
+        if (Input.GetKeyDown(KeyCode.T))
         {
-            Layer2Objects.SetActive(false);
+            AddScore(5);
         }
 
     }
@@ -65,16 +90,16 @@ public class GameManager : MonoBehaviour
     //    }
     }
 
-    void ActivateLayer(int layer)
-    {
-        if (layer == 2)
-        {
-            if (Layer2Objects != null)
-            {
-                Layer2Objects.SetActive(true);
-            }
-        }
-    }
+    //void ActivateLayer(int layer)
+    //{
+    //    if (layer == 2)
+    //    {
+    //        if (Layer2Objects != null)
+    //        {
+    //            Layer2Objects.SetActive(true);
+    //        }
+    //    }
+    //}
 
     IEnumerator DoLayerTransition(int layer)
     {
@@ -84,46 +109,71 @@ public class GameManager : MonoBehaviour
         // freeze snake
         SnakeController snake = FindObjectOfType<SnakeController>();
         Rigidbody2D rb = snake.GetComponent<Rigidbody2D>();
-        Collider2D col = snake.GetComponent<Collider2D>(); 
+        Collider2D col = snake.GetComponent<Collider2D>();
 
         Vector3 frozenPos = snake.transform.position;
 
-        snake.enabled = false;       // stop logic
-        rb.simulated = false;        // stop physics
-        col.enabled = false;         // stop collisions
+        snake.enabled = false;
+        rb.simulated = false;
+        col.enabled = false;
 
-        HardFreeze[] hazards = Layer2Objects.GetComponentsInChildren<HardFreeze>(true);
-        foreach (var h in hazards)
-            h.Freeze();
+        snake.HardFreeze(); 
 
-        snake.HardFreeze();
 
         // glitch
         PlayGlitch();
+        yield return new WaitForSeconds(0.12f);
 
-        // delay BEFORE
-        yield return new WaitForSeconds(0.1f);
 
-        // activate ly2
-        ActivateLayer(layer);
+        // activate layer;
+        if (layer == 2)
+            yield return StartCoroutine(SpawnLayer2Hazards());
 
-        // delay 4 reaction time
-        yield return new WaitForSeconds(0.15f);
+        if (layer == 3)
+        {
+            if (Layer3BG != null) Layer3BG.SetActive(true);
+            layer3Active = true;
+            yield return StartCoroutine(SpawnLayer3Hazards());
+        }
 
-        // unfreeze 
 
-        Debug.Log("Unfreezing snake");
+        // unfreeze
         snake.transform.position = frozenPos;
         col.enabled = true;
         rb.simulated = true;
         snake.enabled = true;
-        
-        Debug.Log("Unfreezing hazards of layer 2");
-        foreach (var h in hazards)
-            h.Unfreeze();
 
-        Debug.Log("Unfreeze COMPLETE");
 
         isTrans = false;
+    }
+
+
+    // LAYER 2 SPAWN
+    IEnumerator SpawnLayer2Hazards()
+    {
+        foreach (GameObject prefab in Layer2Prefabs)
+        {
+            GameObject h = Instantiate(prefab, Layer2Container);
+
+            HardFreeze hf = h.GetComponent<HardFreeze>();
+            if (hf != null) hf.Unfreeze();
+
+            yield return null;
+        }
+    }
+
+
+    // LAYER 3 SPAWN
+    IEnumerator SpawnLayer3Hazards()
+    {
+        foreach (GameObject prefab in Layer3Prefabs)
+        {
+            GameObject h = Instantiate(prefab, Layer3Container);
+
+            HardFreeze hf = h.GetComponent<HardFreeze>();
+            if (hf != null) hf.Unfreeze();
+
+            yield return null;
+        }
     }
 }
