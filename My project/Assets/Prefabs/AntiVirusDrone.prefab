@@ -177,3 +177,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 2
   distance: 3
+  isFrozen: 0
+  movementType: 1

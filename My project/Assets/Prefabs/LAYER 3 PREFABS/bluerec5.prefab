@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 5746128092062279278}
   - component: {fileID: 1205914449007962422}
   - component: {fileID: 7487864698255497024}
-  - component: {fileID: 4313437544795950595}
+  - component: {fileID: -4867669181426406551}
+  - component: {fileID: 5266598394107732003}
   m_Layer: 0
   m_Name: bluerec5
   m_TagString: Untagged
@@ -28,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 7947150137939450004}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.68, y: 4.91, z: 0}
+  m_LocalPosition: {x: 0.43, y: 1.53, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -119,7 +120,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -135,7 +136,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 23.603092, y: 16.4}
   m_EdgeRadius: 0
---- !u!114 &4313437544795950595
+--- !u!114 &-4867669181426406551
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -144,6 +145,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 7947150137939450004}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 530c3f96ac617d4418e7b75085f78340, type: 3}
+  m_Script: {fileID: 11500000, guid: 3ede3a6012d51974ab816426768c070f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5266598394107732003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7947150137939450004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 132294b5c51d25741900e2890fc63fa7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 1.1
+  snapInterval: 0.08

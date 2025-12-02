@@ -1,8 +1,9 @@
-using UnityEngine;
-using TMPro;
-using UnityEngine.Rendering.Universal;
 using System.Collections;
+using TMPro;
 using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.Rendering.Universal;
+using static UnityEngine.GraphicsBuffer;
 
 public class GameManager : MonoBehaviour
 {
@@ -18,20 +19,24 @@ public class GameManager : MonoBehaviour
 
 
     // layer 2
-    public GameObject[] Layer2Prefabs;
-    public Transform Layer2Container;
+    public MovingFirewall[] Layer2_Firewalls;
+    public AntiVirusDrone[] Layer2_Drones;
+
 
     // layer 3
-    public GameObject Layer3BG; 
+    public GameObject Layer3BG;
     public GameObject[] Layer3Prefabs;
+
+    public Transform[] L3HazardPos;
+
     public Transform Layer3Container;
-    private bool layer3Active = false;
+
 
     private int currLayer = 1;
-    private bool isTrans = false; 
+    private bool isTrans = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    
+
 
 
     void Start()
@@ -41,19 +46,22 @@ public class GameManager : MonoBehaviour
 
         scoreTXT.text = "SCORE: 0";
         layerTXT.text = "LAYER: 1";
+        foreach (MovingFirewall fw in Layer2_Firewalls)
+            fw.gameObject.SetActive(false);
 
-        if (Layer2Container != null) {
-            foreach (Transform child in Layer2Container) child.gameObject.SetActive(false);
-        }
+        // Drones ACTIVE + moving in layer 1
+        foreach (AntiVirusDrone d in Layer2_Drones)
+            d.gameObject.SetActive(true);
 
-        if (Layer3Container != null) {
-            foreach (Transform child in Layer3Container) child.gameObject.SetActive(false);
+        if (Layer3BG != null)
+            Layer3BG.SetActive(false);
 
-        }
-        if (Layer3BG != null) Layer3BG.SetActive(false);
+        if (Layer3Container != null)
+            foreach (Transform t in Layer3Container)
+                t.gameObject.SetActive(false);
     }
 
-     void Update()
+    void Update()
     {
         // DEBUGGING/TESTING
 
@@ -84,22 +92,36 @@ public class GameManager : MonoBehaviour
     public void PlayGlitch()
     {
 
-    //    if (glitchAnim != null)
-    //    {
-            glitchAnim.SetTrigger("Flash");
-    //    }
+        //    if (glitchAnim != null)
+        //    {
+        glitchAnim.SetTrigger("Flash");
+        //    }
     }
 
-    //void ActivateLayer(int layer)
-    //{
-    //    if (layer == 2)
-    //    {
-    //        if (Layer2Objects != null)
-    //        {
-    //            Layer2Objects.SetActive(true);
-    //        }
-    //    }
-    //}
+
+    void RepositionExistingHazards(Transform[] targets)
+    {
+        int index = 0;
+
+        // move drones FIRST
+        foreach (AntiVirusDrone d in Layer2_Drones)
+        {
+            if (index < targets.Length)
+                d.transform.position = targets[index].position;
+            index++;
+        }
+
+        // then firewalls
+        foreach (MovingFirewall w in Layer2_Firewalls)
+        {
+            if (index < targets.Length)
+                w.transform.position = targets[index].position;
+            index++;
+        }
+    }
+
+
+
 
     IEnumerator DoLayerTransition(int layer)
     {
@@ -117,7 +139,7 @@ public class GameManager : MonoBehaviour
         rb.simulated = false;
         col.enabled = false;
 
-        snake.HardFreeze(); 
+        snake.HardFreeze();
 
 
         // glitch
@@ -127,13 +149,33 @@ public class GameManager : MonoBehaviour
 
         // activate layer;
         if (layer == 2)
-            yield return StartCoroutine(SpawnLayer2Hazards());
+        {
+            foreach (var fw in Layer2_Firewalls)
+                if (fw != null) fw.isFrozen = false;
+
+            foreach (var d in Layer2_Drones)
+                if (d != null) d.isFrozen = false;
+
+        }
+
+
 
         if (layer == 3)
         {
+            //foreach (Transform child in Layer2Container)
+            //    Destroy(child.gameObject);
+
             if (Layer3BG != null) Layer3BG.SetActive(true);
-            layer3Active = true;
+            RepositionExistingHazards(L3HazardPos);
+
+
+
             yield return StartCoroutine(SpawnLayer3Hazards());
+            //yield return StartCoroutine(SpawnLayer3Obstacles());
+
+            CameraZoom zoom = Camera.main.GetComponent<CameraZoom>();
+            if (zoom != null)
+                StartCoroutine(zoom.ZoomIn());
         }
 
 
@@ -148,27 +190,13 @@ public class GameManager : MonoBehaviour
     }
 
 
-    // LAYER 2 SPAWN
-    IEnumerator SpawnLayer2Hazards()
-    {
-        foreach (GameObject prefab in Layer2Prefabs)
-        {
-            GameObject h = Instantiate(prefab, Layer2Container);
-
-            HardFreeze hf = h.GetComponent<HardFreeze>();
-            if (hf != null) hf.Unfreeze();
-
-            yield return null;
-        }
-    }
-
-
     // LAYER 3 SPAWN
     IEnumerator SpawnLayer3Hazards()
     {
         foreach (GameObject prefab in Layer3Prefabs)
         {
             GameObject h = Instantiate(prefab, Layer3Container);
+            h.transform.SetParent(Layer3Container, worldPositionStays: true);
 
             HardFreeze hf = h.GetComponent<HardFreeze>();
             if (hf != null) hf.Unfreeze();
@@ -176,4 +204,5 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
     }
+
 }

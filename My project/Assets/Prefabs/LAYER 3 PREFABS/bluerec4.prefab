@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 1661110622183222267}
   - component: {fileID: 5591523725824916756}
   - component: {fileID: 7646517945162619141}
-  - component: {fileID: 7432277242821943275}
+  - component: {fileID: -7088682014957485169}
+  - component: {fileID: 7832172105580705554}
   m_Layer: 0
   m_Name: bluerec4
   m_TagString: Untagged
@@ -28,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 6753407229738513750}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.4004636, y: -0.24, z: 0}
+  m_LocalPosition: {x: -0.2371363, y: -0.4191869, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -119,7 +120,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -135,7 +136,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 23.603092, y: 16.4}
   m_EdgeRadius: 0
---- !u!114 &7432277242821943275
+--- !u!114 &-7088682014957485169
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -144,6 +145,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 6753407229738513750}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 530c3f96ac617d4418e7b75085f78340, type: 3}
+  m_Script: {fileID: 11500000, guid: 3ede3a6012d51974ab816426768c070f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7832172105580705554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6753407229738513750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 132294b5c51d25741900e2890fc63fa7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 1.1
+  snapInterval: 0.08

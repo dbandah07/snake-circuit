@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 7004644660370022287}
   - component: {fileID: 1778160757683602731}
   - component: {fileID: 8161439140321289576}
-  - component: {fileID: 6687863555522132692}
+  - component: {fileID: -3564577814766226633}
+  - component: {fileID: 6980423419593058257}
   m_Layer: 0
   m_Name: bluecircle6
   m_TagString: Untagged
@@ -28,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 2052081489188412961}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.6, y: 2.62, z: -9.919164}
+  m_LocalPosition: {x: 1.801853, y: -0.04585078, z: -9.919164}
   m_LocalScale: {x: 0.59, y: 0.59, z: 0.59}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -119,13 +120,13 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: -0.0000009536743, y: 0.00000023841858}
   m_Radius: 11.801546
---- !u!114 &6687863555522132692
+--- !u!114 &-3564577814766226633
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -134,6 +135,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 2052081489188412961}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 530c3f96ac617d4418e7b75085f78340, type: 3}
+  m_Script: {fileID: 11500000, guid: 3ede3a6012d51974ab816426768c070f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6980423419593058257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2052081489188412961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 132294b5c51d25741900e2890fc63fa7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 1.1
+  snapInterval: 0.08
