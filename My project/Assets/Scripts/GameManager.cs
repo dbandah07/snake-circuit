@@ -150,11 +150,12 @@ public class GameManager : MonoBehaviour
         // activate layer;
         if (layer == 2)
         {
-            foreach (var fw in Layer2_Firewalls)
-                if (fw != null) fw.isFrozen = false;
 
-            foreach (var d in Layer2_Drones)
-                if (d != null) d.isFrozen = false;
+            foreach (MovingFirewall fw in Layer2_Firewalls)
+                fw.gameObject.SetActive(true);
+
+            foreach (AntiVirusDrone d  in Layer2_Drones)
+                d.gameObject.SetActive(true);
 
         }
 
