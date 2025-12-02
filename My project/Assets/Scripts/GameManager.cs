@@ -31,6 +31,10 @@ public class GameManager : MonoBehaviour
 
     public Transform Layer3Container;
 
+    // layer 4
+    public Transform[] L4HazardPos;
+    public Transform[] L4VisualPos;
+
 
     private int currLayer = 1;
     private bool isTrans = false;
@@ -125,9 +129,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
-
-
     IEnumerator DoLayerTransition(int layer)
     {
         if (isTrans) yield break;
@@ -189,6 +190,23 @@ public class GameManager : MonoBehaviour
                 StartCoroutine(zoom.ZoomIn());
         }
 
+        if (layer == 4)
+        {
+            PlayGlitch();
+            yield return new WaitForSeconds(0.1f);
+
+            // visual rearrangement
+            yield return StartCoroutine(GlitchyRearrangeVisuals(L4VisualPos));
+
+            // hazards 
+            RepositionExistingHazards(L4HazardPos);
+
+            // zoom
+            CameraZoom zoom = Camera.main.GetComponent<CameraZoom>();
+            if (zoom != null)
+                StartCoroutine(zoom.ZoomIn());
+        }
+
 
         // unfreeze
         snake.transform.position = frozenPos;
@@ -215,5 +233,51 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
     }
+
+    IEnumerator GlitchyRearrangeVisuals(Transform[] targets)
+    {
+        int count = Mathf.Min(targets.Length, Layer3Container.childCount);
+
+        // jitter + spin
+        float glitchTime = 0.3f;
+        float t = 0f;
+
+        while (t < glitchTime)
+        {
+            t += Time.deltaTime;
+            float rot = Random.Range(-25f, 25f);
+
+            foreach (Transform child in Layer3Container)
+            {
+                child.rotation = Quaternion.Euler(0, 0, rot);
+                child.position += (Vector3)Random.insideUnitCircle * 0.06f;
+            }
+
+            yield return null;
+        }
+
+        // NEW POS
+        for (int i = 0; i < count; i++)
+        {
+            Layer3Container.GetChild(i).position = targets[i].position;
+        }
+
+        // SPIN
+        float settleTime = 0.25f;
+        t = 0f;
+        while (t < settleTime)
+        {
+            t += Time.deltaTime;
+            float rot = Mathf.Lerp(35f, 0f, t / settleTime);
+
+            foreach (Transform child in Layer3Container)
+            {
+                child.rotation = Quaternion.Euler(0, 0, rot);
+            }
+
+            yield return null;
+        }
+    }
+
 
 }
