@@ -514,6 +514,16 @@ public class GameManager : MonoBehaviour
         }
 
         // TRIGGER CUT SCENE 
+
+        // if player wins:
+        // ERROR could not complete anti virus scan
+        // snake w coffee ?? 
+        // play again (btn) ?
+
+        // if snake wins: 
+        // run anti virus scan bar (again) FILLED up all the way this time. 
+        // ANTI VIRUS SCAN COMPLETE
+        // GAME OVER, play again (btn) ?
     }
 
 }
