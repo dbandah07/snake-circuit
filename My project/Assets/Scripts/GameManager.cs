@@ -4,6 +4,8 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using static UnityEngine.GraphicsBuffer;
+using UnityEngine.UI;
+
 
 public class GameManager : MonoBehaviour
 {
@@ -35,6 +37,19 @@ public class GameManager : MonoBehaviour
     public Transform[] L4HazardPos;
     public Transform[] L4VisualPos;
 
+    // layer 5: BOSS
+    public GameObject Layer5Container;
+    public GameObject Warning;
+    public GameObject Siren;
+
+    public GameObject OrangeBG;
+    public ProgressBarAnti bossBar;
+
+
+    public int bossTargetScore = 10;
+    private bool bossRunning = false;
+
+
 
     private int currLayer = 1;
     private bool isTrans = false;
@@ -45,6 +60,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+
         if (instance == null) instance = this;
         else Destroy(gameObject);
 
@@ -63,13 +79,20 @@ public class GameManager : MonoBehaviour
         if (Layer3Container != null)
             foreach (Transform t in Layer3Container)
                 t.gameObject.SetActive(false);
+
+        if (Layer5Container != null)
+            Layer5Container.SetActive(false);
+        Warning.SetActive(false);
+        Siren.SetActive(false);
+        OrangeBG.SetActive(false);
+
     }
 
     void Update()
     {
         // DEBUGGING/TESTING
 
-        Debug.Log("Adding 5 to score...");
+        //Debug.Log("Adding 5 to score...");
         if (Input.GetKeyDown(KeyCode.T))
         {
             AddScore(5);
@@ -207,6 +230,13 @@ public class GameManager : MonoBehaviour
                 StartCoroutine(zoom.ZoomIn());
         }
 
+        if (layer == 5)
+        {
+            Debug.Log("BOSS LEVEL");
+            yield return StartCoroutine(BossLayerTransition());
+
+        }
+
 
         // unfreeze
         snake.transform.position = frozenPos;
@@ -279,5 +309,66 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    IEnumerator BossLayerTransition()
+    {
+        // freeze player movement
+        SnakeController snake = FindObjectOfType<SnakeController>();
+        Rigidbody2D rb = snake.GetComponent<Rigidbody2D>();
+        Collider2D col = snake.GetComponent<Collider2D>();
+
+        snake.enabled = false;
+        rb.simulated = false;
+        col.enabled = false;
+
+        // TRIPLE GLITCH
+        for (int i = 0; i < 3; i++)
+        {
+            PlayGlitch();
+            yield return new WaitForSeconds(0.15f);
+        }
+
+        OrangeBG.SetActive(true);
+        Image bg = OrangeBG.GetComponent<Image>();
+        Color c = bg.color;
+        c.a = 1f;
+        bg.color = c;
+
+        // WARNING FLASH
+        Warning.SetActive(true);
+        Debug.Log("WARNING ACTIVE = " + Warning.activeSelf);
+
+        for (int i = 0; i < 4; i++)
+        {
+            Warning.SetActive(i % 2 == 0);
+            yield return new WaitForSeconds(0.1f);
+        }
+        Warning.SetActive(false);
+        Debug.Log("WARNING ACTIVE = " + Warning.activeSelf);
+
+        // SIREN FLASH
+        Siren.SetActive(true);
+        for (int i = 0; i < 4; i++)
+        {
+            Siren.SetActive(i % 2 == 0);
+            yield return new WaitForSeconds(0.1f);
+        }
+        Siren.SetActive(true);
+        bossBar.fillBar.fillAmount = 0;
+        yield return StartCoroutine(bossBar.PlayScanBar(2f, 0.25f));
+
+        Siren.SetActive(false); // turns off
+        bossBar.gameObject.SetActive(false);
+        OrangeBG.SetActive(false);
+
+        // ENABLE BOSS UI
+        Layer5Container.SetActive(true);
+        bossRunning = true;
+
+        // UNFREEZE PLAYER
+        snake.transform.position = snake.transform.position;
+        snake.enabled = true;
+        rb.simulated = true;
+        col.enabled = true;
+    }
 
 }

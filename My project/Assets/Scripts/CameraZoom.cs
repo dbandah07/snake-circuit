@@ -16,10 +16,10 @@ public class CameraZoom : MonoBehaviour
     
     }
 
-    void Update()
-    {
-        Debug.Log("Camera size: " + cam.orthographicSize);
-    }
+    //void Update()
+    //{
+    //    Debug.Log("Camera size: " + cam.orthographicSize);
+    //}
 
     public IEnumerator ZoomIn()
     {
