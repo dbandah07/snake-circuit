@@ -213,6 +213,7 @@ public class SnakeController : MonoBehaviour
         Destroy(packet);
         if (GameManager.instance.bossRunning)
         {
+            Grow();
             GameManager.instance.PlayerCollectRacePacket();
         }
         else

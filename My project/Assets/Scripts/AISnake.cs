@@ -3,11 +3,14 @@ using UnityEngine;
 
 public class AISnakeController : MonoBehaviour
 {
-    public float moveRate = 0.3f;   // SAME as player
+    public float moveRate = 0.3f;  // slower (slightly)
     private float moveTimer;
 
     public Transform segmentPrefab;   // SAME segment prefab
     private List<Transform> segments = new List<Transform>();
+
+    // not growing in right direction...
+    private Vector3 lastTailPos;
 
     private Vector2Int direction = Vector2Int.right;  // default
     private Vector3 lastHeadPos;
@@ -48,17 +51,25 @@ public class AISnakeController : MonoBehaviour
         {
             thinkTimer = 0f;
 
+            // calculate turn
             Vector2 diff = targetPacket.position - transform.position;
 
+            Vector2Int desired;
+
             if (Mathf.Abs(diff.x) > Mathf.Abs(diff.y))
-                direction = new Vector2Int(diff.x > 0 ? 1 : -1, 0);
+                desired = new Vector2Int(diff.x > 0 ? 1 : -1, 0);
             else
-                direction = new Vector2Int(0, diff.y > 0 ? 1 : -1);
-            
+                desired = new Vector2Int(0, diff.y > 0 ? 1 : -1);
+            if (!(desired.x == -direction.x && desired.y == -direction.y))
+                direction = desired;
+
         }
 
         lastHeadPos = transform.position;
         transform.position += new Vector3(direction.x, direction.y, 0);
+
+        // keep track of tail
+        lastTailPos = segments[segments.Count - 1].position;
 
 
         for (int i = 1; i < segments.Count; i++)
@@ -73,12 +84,27 @@ public class AISnakeController : MonoBehaviour
     // find packet
     void FindPacket()
     {
-        if (!GameManager.instance.bossRunning) return;
+
+        if (!GameManager.instance.bossRunning)
+        {
+            Debug.Log("Finding packet, boss running = FALSE");
+            return;
+        }
+
+        Debug.Log("Finding packet... bossRunning = TRUE");
 
         if (targetPacket == null)
         {
             GameObject p = GameObject.FindWithTag("Packet");
-            if (p != null) targetPacket = p.transform;
+            if (p != null)
+            {
+                targetPacket = p.transform;
+                Debug.Log("AI Found packet at pos: " + targetPacket.position);
+            }
+            else
+            {
+                Debug.Log("NO PACKET FOUND");
+            }
         }
     }
 
@@ -87,7 +113,7 @@ public class AISnakeController : MonoBehaviour
     public void Grow()
     {
         Transform newSeg = Instantiate(segmentPrefab);
-        newSeg.position = segments[segments.Count - 1].position;
+        newSeg.position = lastTailPos; 
         newSeg.tag = "AISegment";
         segments.Add(newSeg);
     }
