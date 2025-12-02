@@ -108,7 +108,7 @@ public class GameManager : MonoBehaviour
         {
             if (index < targets.Length)
             {
-                d.transform.position = targets[index].position;
+                d.ForceReposition(targets[index].position);
                 index++;
             }
         }
@@ -158,10 +158,14 @@ public class GameManager : MonoBehaviour
             foreach (MovingFirewall fw in Layer2_Firewalls)
             {
                 fw.gameObject.SetActive(true);
+                fw.isFrozen = false;
                 fw.ResetPosition();
             }
-            foreach (AntiVirusDrone d  in Layer2_Drones)
+            foreach (AntiVirusDrone d in Layer2_Drones)
+            {
                 d.gameObject.SetActive(true);
+                d.isFrozen = false;
+            }
 
         }
 

@@ -36,6 +36,7 @@ public class AntiVirusDrone : MonoBehaviour
     public void ForceReposition(Vector2 newPos)
     {
         transform.position = newPos;
+        starPos = newPos;
     }
 
 }
