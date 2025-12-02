@@ -149,7 +149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveRate: 0.15
-  segmentPrefab: {fileID: 1210621731457050083, guid: 35d3879b2eb27c14483279c918c11241, type: 3}
+  segmentPrefab: {fileID: 5877930883803346029, guid: 35d3879b2eb27c14483279c918c11241, type: 3}
   thinkDelay: 0.2
 --- !u!50 &-8881815872334584955
 Rigidbody2D:

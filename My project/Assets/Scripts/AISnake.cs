@@ -12,7 +12,7 @@ public class AISnakeController : MonoBehaviour
     // not growing in right direction...
     private Vector3 lastTailPos;
 
-    private Vector2Int direction = Vector2Int.right;  // default
+    private Vector2Int direction = Vector2Int.zero;
     private Vector3 lastHeadPos;
 
     private Transform targetPacket;   // packet
@@ -26,8 +26,8 @@ public class AISnakeController : MonoBehaviour
     {
         segments.Add(this.transform);  // head
 
-        // Check for new packet every 0.2s
-        InvokeRepeating(nameof(FindPacket), 0f, 0.2f);
+        // check less often, due to logs 
+        InvokeRepeating(nameof(FindPacket), 0.25f, 0.2f);
     }
 
     void FixedUpdate()
@@ -42,8 +42,10 @@ public class AISnakeController : MonoBehaviour
     }
 
     // movement
-    void Move()
-    {
+void Move()
+{
+        if (!GameManager.instance.bossRunning) return;
+
         if (targetPacket == null) return;
 
         thinkTimer += moveRate;
@@ -51,61 +53,55 @@ public class AISnakeController : MonoBehaviour
         {
             thinkTimer = 0f;
 
-            // calculate turn
             Vector2 diff = targetPacket.position - transform.position;
 
-            Vector2Int desired;
-
             if (Mathf.Abs(diff.x) > Mathf.Abs(diff.y))
-                desired = new Vector2Int(diff.x > 0 ? 1 : -1, 0);
+            {
+                direction = new Vector2Int(diff.x > 0 ? 1 : -1, 0);
+            }
             else
-                desired = new Vector2Int(0, diff.y > 0 ? 1 : -1);
-            if (!(desired.x == -direction.x && desired.y == -direction.y))
-                direction = desired;
-
+            {
+                direction = new Vector2Int(0, diff.y > 0 ? 1 : -1);
+            }
         }
-
         lastHeadPos = transform.position;
-        transform.position += new Vector3(direction.x, direction.y, 0);
+        Vector3 newPos = transform.position + new Vector3(direction.x, direction.y, 0);
+        transform.position = newPos;
 
-        // keep track of tail
-        lastTailPos = segments[segments.Count - 1].position;
-
-
+        // move body
         for (int i = 1; i < segments.Count; i++)
         {
             Vector3 temp = segments[i].position;
             segments[i].position = lastHeadPos;
             lastHeadPos = temp;
         }
-    }
+        lastTailPos = lastHeadPos;
+}
+
 
 
     // find packet
     void FindPacket()
     {
+        if (!GameManager.instance.bossRunning) return;
 
-        if (!GameManager.instance.bossRunning)
+        GameObject[] packets = GameObject.FindGameObjectsWithTag("Packet");
+        if (packets.Length == 0) return;
+
+        Transform closest = packets[0].transform;
+        float bestDist = Vector2.Distance(transform.position, closest.position);
+
+        for (int i = 1; i < packets.Length; i++)
         {
-            Debug.Log("Finding packet, boss running = FALSE");
-            return;
-        }
-
-        Debug.Log("Finding packet... bossRunning = TRUE");
-
-        if (targetPacket == null)
-        {
-            GameObject p = GameObject.FindWithTag("Packet");
-            if (p != null)
+            float d = Vector2.Distance(transform.position, packets[i].transform.position);
+            if (d < bestDist)
             {
-                targetPacket = p.transform;
-                Debug.Log("AI Found packet at pos: " + targetPacket.position);
-            }
-            else
-            {
-                Debug.Log("NO PACKET FOUND");
+                bestDist = d;
+                closest = packets[i].transform;
             }
         }
+
+        targetPacket = closest;
     }
 
 
