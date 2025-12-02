@@ -1,14 +1,18 @@
 using UnityEngine;
+using static UnityEngine.UI.ScrollRect;
 
 public class AntiVirusDrone : MonoBehaviour
 {
     public float speed = 2f;
     public float distance = 3f;
 
-    public bool isFrozen = false;
+    // bounding;
+    public float minX = -7.8f;
+    public float maxX = 7.8f;
+    public float minY = -3.7f;
+    public float maxY = 3.7f;
 
-    public enum MovementType { horiz, vert }
-    public MovementType movementType = MovementType.horiz;
+    public bool isFrozen = false;
 
 
     private Vector3 starPos;
@@ -22,16 +26,19 @@ public class AntiVirusDrone : MonoBehaviour
     void Update()
     {
         if (isFrozen) return;
+        float leftRoom = starPos.x - minX;
+        float rightRoom = maxX - starPos.x;
+        float allowedX = Mathf.Min(distance, leftRoom, rightRoom);
 
-        float offset = Mathf.PingPong(Time.time * speed, distance * 2) - distance;
-        if (movementType == MovementType.horiz)
-        {
-            transform.position = new Vector3(starPos.x + offset, starPos.y, starPos.z); // hori hazard
-        }
-        else
-        {
-            transform.position = new Vector3(starPos.x, starPos.y + offset, starPos.z); // vertical hazard
-        }
+        float downRoom = starPos.y - minY;
+        float upRoom = maxY - starPos.y;
+        float allowedY = Mathf.Min(distance, downRoom, upRoom);
+
+        float offset = 0f;
+
+
+        offset = Mathf.PingPong(Time.time * speed, allowedY * 2) - allowedY;
+        transform.position = new Vector3(starPos.x, starPos.y + offset, starPos.z);
     }
     public void ForceReposition(Vector2 newPos)
     {
