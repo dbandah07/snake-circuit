@@ -18,7 +18,7 @@ public class SnakeController : MonoBehaviour
 
     public Transform segmentPrefab;
 
-    private List<Transform> segments = new List<Transform>();
+    public List<Transform> segments = new List<Transform>();
 
     private Vector3 lastHeadPos;
 
@@ -89,12 +89,12 @@ public class SnakeController : MonoBehaviour
         }
     }
 
-    public void Grow() 
+    public void Grow()
     {
         Transform newSeg = Instantiate(segmentPrefab);
         newSeg.position = segments[segments.Count - 1].position;
         segments.Add(newSeg);
-    
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -103,7 +103,7 @@ public class SnakeController : MonoBehaviour
         Debug.Log("Collided w " + collision.name + " Tag is " + collision.tag + " Layer is " + LayerMask.LayerToName(collision.gameObject.layer));
 
         if (isDead) return;
-        
+
         if (collision.CompareTag("Packet"))
         {
             StartCoroutine(HandlePacketPickup(collision.gameObject));
@@ -126,10 +126,14 @@ public class SnakeController : MonoBehaviour
 
             StartCoroutine(DeathSequence());
         }
-        else if (collision.CompareTag("AISegment"))
+        else if (collision.CompareTag("AISegment") || collision.CompareTag("AISnakeHead"))
         {
+            if (segments.Count <= 1)
+            {
+                GameManager.instance.EndRace(false);
+                return;
+            }
             GameManager.instance.PlayerLoseOneSegment();
-            return;
         }
     }
 
@@ -225,11 +229,16 @@ public class SnakeController : MonoBehaviour
     }
     public void LoseOneSegment()
     {
-        // Can't shrink below head
+        // if player only has head, they die
         if (segments.Count <= 1)
+        {
+            Destroy(gameObject);
+            GameManager.instance.AIWinsRace();
             return;
+        }
 
-        // Remove the last segment
+
+        // otherwise remove segment 
         Transform lastSeg = segments[segments.Count - 1];
         segments.RemoveAt(segments.Count - 1);
         Destroy(lastSeg.gameObject);

@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class AISnakeController : MonoBehaviour
 {
-    public float moveRate = 0.3f;  // slower (slightly)
+    public float moveRate = 0.2f;  // slower (slightly)
     private float moveTimer;
 
     public Transform segmentPrefab;   // SAME segment prefab
-    private List<Transform> segments = new List<Transform>();
+    public List<Transform> segments = new List<Transform>();
 
     // not growing in right direction...
     private Vector3 lastTailPos;

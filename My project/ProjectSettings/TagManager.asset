@@ -9,6 +9,7 @@ TagManager:
   - Wall
   - AISegment
   - PlayerSegment
+  - AISnakeHead
   layers:
   - Default
   - TransparentFX

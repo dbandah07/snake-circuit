@@ -9,8 +9,6 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-
-
     public static GameManager instance;
 
     // ui + score + glitch
@@ -61,6 +59,7 @@ public class GameManager : MonoBehaviour
 
     public Transform playerSpawnPoint;
 
+    private bool isRaceOver = false; 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
@@ -454,14 +453,67 @@ public class GameManager : MonoBehaviour
 
     void PlayerWinsRace()
     {
+        if (isRaceOver) return;
+
+        isRaceOver = true;
         Debug.Log("PLAYER WINS!");
+        EndRace(true);
         // VICTORY SCREEN
     }
 
-    void AIWinsRace()
+    public void AIWinsRace()
     {
+        if(isRaceOver) return;
+        isRaceOver = true;
         Debug.Log("AI WINS!");
+
+        EndRace(false);
         // DEFEAT
+    }
+    public void EndRace(bool playerWin)
+    {
+        bossRunning = false;
+        isRaceOver = true; 
+
+        // destroy ALL packets
+        GameObject[] packets = GameObject.FindGameObjectsWithTag("Packet");
+        foreach (GameObject p in packets)
+            Destroy(p);
+
+        // stop AI from moving
+        AISnakeController ai = FindObjectOfType<AISnakeController>();
+        SnakeController player = FindObjectOfType<SnakeController>();
+
+        if (playerWin)
+        {
+            if (ai != null)
+            {
+                foreach (Transform seg in ai.segments)
+                {
+                    if (seg != null) Destroy(seg.gameObject);
+
+                    Destroy(seg.gameObject);
+                }
+            }
+
+            if (player != null) player.enabled = false;
+        }
+        else
+        {
+            if (player != null)
+            {
+                foreach (Transform seg in player.segments)
+                {
+                    if (seg != null) Destroy(seg.gameObject);
+
+                    Destroy(seg.gameObject);
+                }
+            }
+
+            if (ai != null) ai.enabled = false;
+        }
+
+        // TRIGGER CUT SCENE 
     }
 
 }
