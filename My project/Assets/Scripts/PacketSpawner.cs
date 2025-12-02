@@ -5,24 +5,38 @@ public class PacketSpawner : MonoBehaviour
     public GameObject packetPrefab;
     public Vector2 spawnAreaMin = new Vector2(-7.3f, -3.0f);
     public Vector2 spawnAreaMax = new Vector2(7.1f, 3.0f);
-// Start is called once before the first execution of Update after the MonoBehaviour is created
-void Start()
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
     {
-        SpawnSinglePacket();
+        SpawnPacket();
     }
 
-    public void SpawnSinglePacket()
+    //    public void SpawnSinglePacket()
+    //    {
+    //        float safeMinX = -7.3f;
+    //        float safeMaxX = 7.1f;
+
+    //        float safeMinY = -3.0f;
+    //        float safeMaxY = 3.0f;
+
+    //        float x = Mathf.Round(Random.Range(safeMinX, safeMaxX));
+    //        float y = Mathf.Round(Random.Range(safeMinY, safeMaxY));
+
+    //        Vector3 spawnPos = new Vector3(x, y, 0f);
+    //        Instantiate(packetPrefab, spawnPos, Quaternion.identity);
+    //    }
+    public void SpawnPacket()
     {
-        float safeMinX = -7.3f;
-        float safeMaxX = 7.1f;
+        // debugging?
+        GameObject[] packets = GameObject.FindGameObjectsWithTag("Packet");
+        foreach (var p in packets) Destroy(p);
 
-        float safeMinY = -3.0f;
-        float safeMaxY = 3.0f;
-
-        float x = Mathf.Round(Random.Range(safeMinX, safeMaxX));
-        float y = Mathf.Round(Random.Range(safeMinY, safeMaxY));
+        float x = Mathf.Round(Random.Range(spawnAreaMin.x, spawnAreaMax.x));
+        float y = Mathf.Round(Random.Range(spawnAreaMin.y, spawnAreaMax.y));
 
         Vector3 spawnPos = new Vector3(x, y, 0f);
+
+        Debug.Log("Spawn Packet at: " + spawnPos);
         Instantiate(packetPrefab, spawnPos, Quaternion.identity);
     }
 }

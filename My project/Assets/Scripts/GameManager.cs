@@ -28,9 +28,7 @@ public class GameManager : MonoBehaviour
     // layer 3
     public GameObject Layer3BG;
     public GameObject[] Layer3Prefabs;
-
     public Transform[] L3HazardPos;
-
     public Transform Layer3Container;
 
     // layer 4
@@ -44,15 +42,25 @@ public class GameManager : MonoBehaviour
 
     public GameObject OrangeBG;
     public ProgressBarAnti bossBar;
-
-
     public int bossTargetScore = 10;
-    private bool bossRunning = false;
+    public bool bossRunning = false;
 
+    // AI SNAKE
+    public GameObject AISnakePrefab;
+    public Transform AISpawnPoint;
 
+    // KEEP SCORE
+    public int p_Score= 0;
+    public int AI_Score = 0;
+    public int goal = 5;
+
+    public PacketSpawner packetSpawner;
 
     private int currLayer = 1;
     private bool isTrans = false;
+
+    public Transform playerSpawnPoint;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
@@ -232,7 +240,7 @@ public class GameManager : MonoBehaviour
 
         if (layer == 5)
         {
-            Debug.Log("BOSS LEVEL");
+            //Debug.Log("BOSS LEVEL");
             yield return StartCoroutine(BossLayerTransition());
 
         }
@@ -335,7 +343,7 @@ public class GameManager : MonoBehaviour
 
         // WARNING FLASH
         Warning.SetActive(true);
-        Debug.Log("WARNING ACTIVE = " + Warning.activeSelf);
+        //Debug.Log("WARNING ACTIVE = " + Warning.activeSelf);
 
         for (int i = 0; i < 4; i++)
         {
@@ -343,7 +351,7 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
         }
         Warning.SetActive(false);
-        Debug.Log("WARNING ACTIVE = " + Warning.activeSelf);
+        //Debug.Log("WARNING ACTIVE = " + Warning.activeSelf);
 
         // SIREN FLASH
         Siren.SetActive(true);
@@ -360,15 +368,100 @@ public class GameManager : MonoBehaviour
         bossBar.gameObject.SetActive(false);
         OrangeBG.SetActive(false);
 
+        // DISABLE 
+        DisableAllHazardsForBoss();
+
         // ENABLE BOSS UI
         Layer5Container.SetActive(true);
         bossRunning = true;
+        // RACE 
+        p_Score = 0;
+        AI_Score = 0;
+
+        // spawn AI
+        if (AISnakePrefab != null)
+            Instantiate(AISnakePrefab, AISpawnPoint.position, Quaternion.identity);
+
+        // spawn FIRST packet of race
+        packetSpawner.SpawnPacket();
 
         // UNFREEZE PLAYER
         snake.transform.position = snake.transform.position;
         snake.enabled = true;
         rb.simulated = true;
         col.enabled = true;
+        snake.transform.position = playerSpawnPoint.position;
+
+    }
+    void DisableAllHazardsForBoss()
+    {
+        foreach (AntiVirusDrone d in Layer2_Drones)
+        {
+            d.gameObject.SetActive(false);
+        }
+
+        foreach (MovingFirewall fw in Layer2_Firewalls)
+        {
+            fw.gameObject.SetActive(false);
+        }
+
+    }
+
+    public void PlayerCollect_Normal()
+    {
+        AddScore(1);
+        packetSpawner.SpawnPacket();
+    }
+
+
+    public void PlayerCollectRacePacket()
+    {
+        if (!bossRunning) return;
+
+        p_Score++;
+
+        if (p_Score >= goal)
+        {
+            PlayerWinsRace();
+        }
+        else
+        {
+            packetSpawner.SpawnPacket();
+        }
+    }
+
+    public void AICollectRacePacket()
+    {
+        if (!bossRunning) return;
+
+        AI_Score++;
+
+        if (AI_Score >= goal)
+        {
+            AIWinsRace();
+        }
+        else
+        {
+            packetSpawner.SpawnPacket();
+        }
+    }
+
+    public void PlayerLoseOneSegment()
+    {
+        SnakeController snake = FindObjectOfType<SnakeController>();
+        snake.LoseOneSegment();
+    }
+
+    void PlayerWinsRace()
+    {
+        Debug.Log("PLAYER WINS!");
+        // VICTORY SCREEN
+    }
+
+    void AIWinsRace()
+    {
+        Debug.Log("AI WINS!");
+        // DEFEAT
     }
 
 }

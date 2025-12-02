@@ -106,18 +106,13 @@ public class SnakeController : MonoBehaviour
         
         if (collision.CompareTag("Packet"))
         {
-            //Grow();
-            //Destroy(collision.gameObject);
-
-            //FindObjectOfType<PacketSpawner>().SpawnSinglePacket();
-            //GameManager.instance.PlayGlitch();
             StartCoroutine(HandlePacketPickup(collision.gameObject));
             return;
         }
 
         else if (collision.CompareTag("Wall") || collision.CompareTag("Enemy"))
         {
-            Debug.Log("DEATH TRIGGERED BY: " + collision.name + " TAG: " + collision.tag + " LAYER: " + LayerMask.LayerToName(collision.gameObject.layer));
+            //Debug.Log("DEATH TRIGGERED BY: " + collision.name + " TAG: " + collision.tag + " LAYER: " + LayerMask.LayerToName(collision.gameObject.layer));
 
             isDead = true; // free logic
             enabled = false; // stop movement, snake don't tweak (pls)
@@ -130,6 +125,11 @@ public class SnakeController : MonoBehaviour
 
 
             StartCoroutine(DeathSequence());
+        }
+        else if (collision.CompareTag("AISegment"))
+        {
+            GameManager.instance.PlayerLoseOneSegment();
+            return;
         }
     }
 
@@ -198,17 +198,40 @@ public class SnakeController : MonoBehaviour
     }
     IEnumerator HandlePacketPickup(GameObject packet)
     {
-        GetComponent<Collider2D>().enabled = false;
+        //GetComponent<Collider2D>().enabled = false;
 
-        Grow();
-        GameManager.instance.AddScore(1);
+        //Grow();
+        //GameManager.instance.AddScore(1);
+
+        //Destroy(packet);
+        //FindObjectOfType<PacketSpawner>().SpawnSinglePacket();
+
+        //yield return new WaitForFixedUpdate();
+
+        //GetComponent<Collider2D>().enabled = true;
 
         Destroy(packet);
-        FindObjectOfType<PacketSpawner>().SpawnSinglePacket();
+        if (GameManager.instance.bossRunning)
+        {
+            GameManager.instance.PlayerCollectRacePacket();
+        }
+        else
+        {
+            Grow();
+            GameManager.instance.PlayerCollect_Normal();
+        }
+        yield return null;
+    }
+    public void LoseOneSegment()
+    {
+        // Can't shrink below head
+        if (segments.Count <= 1)
+            return;
 
-        yield return new WaitForFixedUpdate();
-
-        GetComponent<Collider2D>().enabled = true;
+        // Remove the last segment
+        Transform lastSeg = segments[segments.Count - 1];
+        segments.RemoveAt(segments.Count - 1);
+        Destroy(lastSeg.gameObject);
     }
 
 }

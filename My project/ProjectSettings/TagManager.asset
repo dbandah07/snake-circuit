@@ -7,6 +7,8 @@ TagManager:
   - Enemy
   - Packet
   - Wall
+  - AISegment
+  - PlayerSegment
   layers:
   - Default
   - TransparentFX
