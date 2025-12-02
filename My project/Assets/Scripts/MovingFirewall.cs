@@ -21,5 +21,8 @@ public class MovingFirewall : MonoBehaviour
         float offset = Mathf.PingPong(Time.time * speed, distance * 2) - distance;
         transform.position = new Vector3(startPos.x + offset, startPos.y, startPos.z);
     }
-
+    public void ResetPosition()
+    {
+        startPos = transform.position;
+    }
 }

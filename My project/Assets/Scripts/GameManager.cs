@@ -107,16 +107,21 @@ public class GameManager : MonoBehaviour
         foreach (AntiVirusDrone d in Layer2_Drones)
         {
             if (index < targets.Length)
+            {
                 d.transform.position = targets[index].position;
-            index++;
+                index++;
+            }
         }
 
         // then firewalls
         foreach (MovingFirewall w in Layer2_Firewalls)
         {
             if (index < targets.Length)
+            {
                 w.transform.position = targets[index].position;
-            index++;
+                w.ResetPosition();
+                index++;
+            }
         }
     }
 
@@ -150,10 +155,11 @@ public class GameManager : MonoBehaviour
         // activate layer;
         if (layer == 2)
         {
-
             foreach (MovingFirewall fw in Layer2_Firewalls)
+            {
                 fw.gameObject.SetActive(true);
-
+                fw.ResetPosition();
+            }
             foreach (AntiVirusDrone d  in Layer2_Drones)
                 d.gameObject.SetActive(true);
 

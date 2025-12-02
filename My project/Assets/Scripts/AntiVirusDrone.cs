@@ -33,4 +33,9 @@ public class AntiVirusDrone : MonoBehaviour
             transform.position = new Vector3(starPos.x, starPos.y + offset, starPos.z); // vertical hazard
         }
     }
+    public void ForceReposition(Vector2 newPos)
+    {
+        transform.position = newPos;
+    }
+
 }
