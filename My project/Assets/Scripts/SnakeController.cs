@@ -28,10 +28,13 @@ public class SnakeController : MonoBehaviour
     private Vector2 touchStartPos;
     private bool touchMoved = false;
     public float minSwipeDistance = 50f;
+    private AudioSource audioSource;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         segments = new List<Transform>();
         segments.Add(this.transform); // first seg = head;
     }
@@ -202,18 +205,7 @@ public class SnakeController : MonoBehaviour
     }
     IEnumerator HandlePacketPickup(GameObject packet)
     {
-        //GetComponent<Collider2D>().enabled = false;
-
-        //Grow();
-        //GameManager.instance.AddScore(1);
-
-        //Destroy(packet);
-        //FindObjectOfType<PacketSpawner>().SpawnSinglePacket();
-
-        //yield return new WaitForFixedUpdate();
-
-        //GetComponent<Collider2D>().enabled = true;
-
+        if (audioSource != null) audioSource.Play();
         Destroy(packet);
         if (GameManager.instance.bossRunning)
         {

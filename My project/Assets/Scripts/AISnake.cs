@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class AISnakeController : MonoBehaviour
 {
-    public float moveRate = 10f;  // slower (slightly)
+    public float moveRate = 0.2f;  // slower (slightly)
     private float moveTimer;
 
     public Transform segmentPrefab;   // SAME segment prefab
@@ -18,7 +18,7 @@ public class AISnakeController : MonoBehaviour
     private Transform targetPacket;   // packet
 
     // debugging, i think ai is too fast, data packets doubke spawn:
-    public float thinkDelay = 10f;
+    public float thinkDelay = 0.5f;
     private float thinkTimer = 0f;
 
 
