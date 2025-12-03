@@ -56,7 +56,6 @@ public class RaceCutsceneUI : MonoBehaviour
     public void ShowAIWin()
     {
         CutSceneBG.gameObject.SetActive(true);
-
         aiWinUI.SetActive(true);
         StartCoroutine(AICutscene());
         //Debug.Log("CUTSCENE ROOT ACTIVE? " + cutsceneRoot.activeInHierarchy);
