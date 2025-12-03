@@ -64,6 +64,7 @@ public class GameManager : MonoBehaviour
     private bool isRaceOver = false; 
 
     public RaceCutsceneUI raceCutsceneUI;
+    public TextMeshProUGUI aiScoreTXT;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
@@ -96,6 +97,7 @@ public class GameManager : MonoBehaviour
         Warning.SetActive(false);
         Siren.SetActive(false);
         OrangeBG.SetActive(false);
+        if (aiScoreTXT != null) aiScoreTXT.gameObject.SetActive(false);
 
     }
 
@@ -377,9 +379,19 @@ public class GameManager : MonoBehaviour
         // ENABLE BOSS UI
         Layer5Container.SetActive(true);
         bossRunning = true;
+
         // RACE 
         p_Score = 0;
         AI_Score = 0;
+        // hide
+        layerTXT.gameObject.SetActive(false);
+
+        // show ai 
+        if (aiScoreTXT != null)
+        {
+            aiScoreTXT.gameObject.SetActive(true);
+            aiScoreTXT.text = "AI: " + AI_Score;
+        }
 
         // spawn AI
         if (AISnakePrefab != null)
@@ -438,6 +450,8 @@ public class GameManager : MonoBehaviour
         if (!bossRunning) return;
 
         AI_Score++;
+
+        if (aiScoreTXT != null) aiScoreTXT.text = "AI: " + AI_Score;
 
         if (AI_Score >= goal)
         {
@@ -535,12 +549,12 @@ public class GameManager : MonoBehaviour
         // run anti virus scan bar (again) FILLED up all the way this time. 
         // ANTI VIRUS SCAN COMPLETE
         // GAME OVER, play again (btn) ?
-    }
-    public void RestartGame()
-    {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(
-            UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex
-        );
+        // Turn off AI race UI
+        if (aiScoreTXT != null) aiScoreTXT.gameObject.SetActive(false);
+
+        // Turn normal UI back on
+        layerTXT.gameObject.SetActive(true);
+
     }
 
 }

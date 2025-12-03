@@ -5,7 +5,6 @@ using Unity.VisualScripting;
 
 public class RaceCutsceneUI : MonoBehaviour
 {
-
     public GameObject playerWinUI;
     public GameObject aiWinUI;
 
@@ -17,10 +16,11 @@ public class RaceCutsceneUI : MonoBehaviour
     public Image gameOverIMG;
     public Image scanSiren;
 
-    public Button playAgainButton;
+
 
     void Start()
     {
+        //cutsceneRoot.SetActive(true);
         // Player win UI hidden
         playerWinUI.SetActive(false);
 
@@ -36,7 +36,7 @@ public class RaceCutsceneUI : MonoBehaviour
         scanCompleteIMG.gameObject.SetActive(false);
         gameOverIMG.gameObject.SetActive(false);
 
-        playAgainButton.gameObject.SetActive(false);
+
     }
 
 
@@ -44,12 +44,16 @@ public class RaceCutsceneUI : MonoBehaviour
     {
         playerWinUI.SetActive(true);
         StartCoroutine(PlayerWinCutscene());
+        //Debug.Log("CUTSCENE ROOT ACTIVE? " + cutsceneRoot.activeInHierarchy);
+
     }
 
     public void ShowAIWin()
     {
         aiWinUI.SetActive(true);
         StartCoroutine(AICutscene());
+        //Debug.Log("CUTSCENE ROOT ACTIVE? " + cutsceneRoot.activeInHierarchy);
+
     }
 
     IEnumerator AICutscene()
@@ -61,9 +65,6 @@ public class RaceCutsceneUI : MonoBehaviour
 
         // load bar
         yield return scanBarFull.PlayScanBar(1.5f, 1f);
-
-        // wait
-        yield return new WaitForSeconds(1.2f);
 
         // hide scan + bar
         scanSiren.gameObject.SetActive(false);
@@ -78,9 +79,10 @@ public class RaceCutsceneUI : MonoBehaviour
         // hide complete
         scanCompleteIMG.gameObject.SetActive(false);
 
-        // game over + btn
+        // game over
         gameOverIMG.gameObject.SetActive(true);
-        playAgainButton.gameObject.SetActive(true);
+
+
     }
 
     IEnumerator PlayerWinCutscene()
@@ -94,9 +96,9 @@ public class RaceCutsceneUI : MonoBehaviour
         // hide error
         errorImage.gameObject.SetActive(false);
 
-        // show btn + snake 
+        //  snake 
         coffeeSnakeImage.gameObject.SetActive(true);
-        playAgainButton.gameObject.SetActive(true);
+
     }
 }
 
