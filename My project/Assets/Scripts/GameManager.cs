@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using static UnityEngine.GraphicsBuffer;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
 
 
 public class GameManager : MonoBehaviour
@@ -533,6 +535,12 @@ public class GameManager : MonoBehaviour
         // run anti virus scan bar (again) FILLED up all the way this time. 
         // ANTI VIRUS SCAN COMPLETE
         // GAME OVER, play again (btn) ?
+    }
+    public void RestartGame()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(
+            UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex
+        );
     }
 
 }
