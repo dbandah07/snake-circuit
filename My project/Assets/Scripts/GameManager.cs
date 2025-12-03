@@ -19,6 +19,9 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI layerTXT;
     public Animator glitchAnim;
 
+    // packets required per layer (index 0 = layer 1)
+    public int[] packetsNeededPerLayer = { 5, 4, 3, 2 };
+
 
     // layer 2
     public MovingFirewall[] Layer2_Firewalls;
@@ -52,7 +55,7 @@ public class GameManager : MonoBehaviour
     // KEEP SCORE
     public int p_Score= 0;
     public int AI_Score = 0;
-    public int goal = 5;
+    public int goal = 10;
 
     public PacketSpawner packetSpawner;
 
@@ -119,12 +122,20 @@ public class GameManager : MonoBehaviour
         score += val;
         scoreTXT.text = "SCORE: " + score;
 
-        int layer = (score / 5) + 1;
-        layerTXT.text = "LAYER: " + layer;
-        if (layer > currLayer)
+        //int layer = (score / 5) + 1;
+        //layerTXT.text = "LAYER: " + layer;
+        //if (layer > currLayer)
+        //{
+        //    currLayer = layer;
+        //    StartCoroutine(DoLayerTransition(layer));
+        //}
+        if (currLayer <= packetsNeededPerLayer.Length &&
+            score >= packetsNeededPerLayer[currLayer - 1])
         {
-            currLayer = layer;
-            StartCoroutine(DoLayerTransition(layer));
+            currLayer++;
+            layerTXT.text = "LAYER: " + currLayer;
+
+            StartCoroutine(DoLayerTransition(currLayer));
         }
 
     }
