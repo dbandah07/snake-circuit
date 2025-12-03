@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using Unity.VisualScripting;
 
+
 public class RaceCutsceneUI : MonoBehaviour
 {
     public GameObject playerWinUI;
@@ -15,6 +16,8 @@ public class RaceCutsceneUI : MonoBehaviour
     public Image scanCompleteIMG;
     public Image gameOverIMG;
     public Image scanSiren;
+
+    public Image CutSceneBG;
 
 
 
@@ -36,12 +39,14 @@ public class RaceCutsceneUI : MonoBehaviour
         scanCompleteIMG.gameObject.SetActive(false);
         gameOverIMG.gameObject.SetActive(false);
 
+        CutSceneBG.gameObject.SetActive(false);
 
     }
 
 
     public void ShowPlayerWin()
     {
+        CutSceneBG.gameObject.SetActive(true);
         playerWinUI.SetActive(true);
         StartCoroutine(PlayerWinCutscene());
         //Debug.Log("CUTSCENE ROOT ACTIVE? " + cutsceneRoot.activeInHierarchy);
@@ -50,6 +55,8 @@ public class RaceCutsceneUI : MonoBehaviour
 
     public void ShowAIWin()
     {
+        CutSceneBG.gameObject.SetActive(true);
+
         aiWinUI.SetActive(true);
         StartCoroutine(AICutscene());
         //Debug.Log("CUTSCENE ROOT ACTIVE? " + cutsceneRoot.activeInHierarchy);
@@ -81,8 +88,6 @@ public class RaceCutsceneUI : MonoBehaviour
 
         // game over
         gameOverIMG.gameObject.SetActive(true);
-
-
     }
 
     IEnumerator PlayerWinCutscene()

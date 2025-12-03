@@ -116,13 +116,13 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         // DEBUGGING/TESTING
-
-        //Debug.Log("Adding 5 to score...");
+        int i = 0;
         if (Input.GetKeyDown(KeyCode.T))
         {
-            AddScore(5);
+            AddScore(5 - i);
+            i++;
+            
         }
-
     }
 
     // Update is called once per frame
@@ -130,14 +130,6 @@ public class GameManager : MonoBehaviour
     {
         score += val;
         scoreTXT.text = "SCORE: " + score;
-
-        //int layer = (score / 5) + 1;
-        //layerTXT.text = "LAYER: " + layer;
-        //if (layer > currLayer)
-        //{
-        //    currLayer = layer;
-        //    StartCoroutine(DoLayerTransition(layer));
-        //}
         int nextLayerIndex = currLayer - 1;
 
         if (nextLayerIndex < layerThresholds.Length &&
@@ -151,11 +143,7 @@ public class GameManager : MonoBehaviour
 
     public void PlayGlitch()
     {
-
-        //    if (glitchAnim != null)
-        //    {
         glitchAnim.SetTrigger("Flash");
-        //    }
     }
 
 
@@ -455,6 +443,8 @@ public class GameManager : MonoBehaviour
 
         p_Score++;
 
+        if (scoreTXT != null) scoreTXT.text = "SCORE: " + (score + p_Score);
+
         if (p_Score >= goal)
         {
             PlayerWinsRace();
@@ -571,9 +561,9 @@ public class GameManager : MonoBehaviour
         // GAME OVER, play again (btn) ?
         // Turn off AI race UI
         if (aiScoreTXT != null) aiScoreTXT.gameObject.SetActive(false);
+        if (scoreTXT != null) scoreTXT.gameObject.SetActive(false);
+        if (layerTXT != null) layerTXT.gameObject.SetActive(false);
 
-        // Turn normal UI back on
-        layerTXT.gameObject.SetActive(true);
 
     }
 
