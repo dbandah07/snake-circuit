@@ -61,6 +61,8 @@ public class GameManager : MonoBehaviour
 
     private bool isRaceOver = false; 
 
+    public RaceCutsceneUI raceCutsceneUI;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
 
@@ -480,7 +482,7 @@ public class GameManager : MonoBehaviour
         foreach (GameObject p in packets)
             Destroy(p);
 
-        // stop AI from moving
+        // references
         AISnakeController ai = FindObjectOfType<AISnakeController>();
         SnakeController player = FindObjectOfType<SnakeController>();
 
@@ -494,9 +496,12 @@ public class GameManager : MonoBehaviour
 
                     Destroy(seg.gameObject);
                 }
+                Destroy(ai.gameObject);
             }
 
             if (player != null) player.enabled = false;
+
+            if (raceCutsceneUI != null) raceCutsceneUI.ShowPlayerWin();
         }
         else
         {
@@ -508,9 +513,13 @@ public class GameManager : MonoBehaviour
 
                     Destroy(seg.gameObject);
                 }
+                Destroy(player.gameObject);
             }
 
             if (ai != null) ai.enabled = false;
+
+            if (raceCutsceneUI != null) raceCutsceneUI.ShowAIWin();
+
         }
 
         // TRIGGER CUT SCENE 

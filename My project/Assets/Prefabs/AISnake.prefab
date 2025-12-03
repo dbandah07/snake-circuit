@@ -148,10 +148,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 451325bc25f3e224ca25fab3415d9923, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveRate: 0.2
+  moveRate: 10
   segmentPrefab: {fileID: 5877930883803346029, guid: 35d3879b2eb27c14483279c918c11241, type: 3}
   segments: []
-  thinkDelay: 0.2
+  thinkDelay: 10
 --- !u!50 &-8881815872334584955
 Rigidbody2D:
   serializedVersion: 5
