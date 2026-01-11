@@ -71,3 +71,6 @@ Touching any hazard triggers:
 - Player win → victory cutscene with UI elements
 - AI win → AI victory cutscene with UI elements
 - All gameplay elements freeze once the race ends
+
+## Notes
+Completed during Fall 2025 as part of the class **Mobile Game Development**
